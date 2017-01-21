@@ -1,5 +1,5 @@
 # gksduds
-gksdud for [Minecraft server](https://spigotmc.org)
+[gksdud](https://npmjs.com/package/gksdud) for [Minecraft server](https://spigotmc.org)
 
 ## Usage
 `,dkssudgktpdy` → `안녕하세요`
