@@ -1,30 +1,11 @@
 # gksduds
-[gksdud](https://npmjs.com/package/gksdud) for [Minecraft server](https://spigotmc.org)
+**[gksdud](https://npmjs.com/package/gksdud)** implementation for [Minecraft servers](https://spigotmc.org)
 
 ## Usage
-`,dkssudgktpdy` → `안녕하세요`
+`,ghrtl ,TNT ,dlTdmtlsqns?` → `혹시 TNT 있으신분?`
+
+## Compatibility
+- fully tested: `Spigot 1.11.2` and `Spigot 1.13.2`
 
 ## License
-```
-MIT License
-
-Copyright (c) 2017 Chalk
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+[MIT License](LICENSE)

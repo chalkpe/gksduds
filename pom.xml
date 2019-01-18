@@ -6,12 +6,12 @@
 
     <groupId>pe.chalk.bukkit</groupId>
     <artifactId>gksduds</artifactId>
-    <version>1.0</version>
+    <version>1.2.0</version>
 
     <packaging>jar</packaging>
 
     <name>gksduds</name>
-    <description>gksdud for Minecraft server</description>
+    <description>gksdud implementation for Minecraft servers</description>
     <url>https://github.com/ChalkPE/gksduds</url>
     <inceptionYear>2017</inceptionYear>
 

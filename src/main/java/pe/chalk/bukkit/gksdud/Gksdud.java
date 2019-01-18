@@ -24,41 +24,39 @@ public class Gksdud extends JavaPlugin implements Listener {
     private final static String ALPHABETS = "QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm";
     private final static String HANGEUL_JAMOS = "ㅃㅂㅉㅈㄸㄷㄲㄱㅆㅅㅛㅛㅕㅕㅑㅑㅒㅐㅖㅔㅁㅁㄴㄴㅇㅇㄹㄹㅎㅎㅗㅗㅓㅓㅏㅏㅣㅣㅋㅋㅌㅌㅊㅊㅍㅍㅠㅠㅜㅜㅡㅡ";
 
-    private final static Pattern HANGEUL_SYLLABLE = Pattern.compile("([ㄲㄷㅁㅅㅆㅇㅈㅊㅋㅌㅍㅎ]|ㅅ?ㄱ|[ㅈㅎ]?ㄴ|[ㄱㅁㅂㅅㅌㅍㅎ]?ㄹ|ㅅ?ㅂ)?([ㅏㅐㅑㅒㅓㅔㅕㅖㅛㅠㅣ]|[ㅏㅐㅣ]?ㅗ|[ㅓㅔㅣ]?ㅜ|ㅣ?ㅡ)([ㄱ-ㅎ])");
-    private final static Map<String, String> COMPLEX_MEDIAL_JAMOS = new HashMap<String, String>(){{ put("ㅗㅏ", "ㅘ"); put("ㅗㅐ", "ㅙ"); put("ㅗㅣ", "ㅚ"); put("ㅜㅓ", "ㅝ"); put("ㅜㅔ", "ㅞ"); put("ㅜㅣ", "ㅟ"); put("ㅡㅣ", "ㅢ"); }};
-    private final static Map<String, String> COMPLEX_FINAL_JAMOS = new HashMap<String, String>(){{ put("ㄱㅅ", "ㄳ"); put("ㄴㅈ", "ㄵ"); put("ㄴㅎ", "ㄶ"); put("ㄹㄱ", "ㄺ"); put("ㄹㅁ", "ㄻ"); put("ㄹㅂ", "ㄼ"); put("ㄹㅅ", "ㄽ"); put("ㄹㅌ", "ㄾ"); put("ㄹㅍ", "ㄿ"); put("ㄹㅎ", "ㅀ"); put("ㅂㅅ", "ㅄ"); }};
+    private final static Pattern HANGEUL_SYLLABLE = Pattern.compile("([ㄱㄲㄴㄷ-ㄹㅁ-ㅃㅅ-ㅎ])([ㅏ-ㅖㅛㅠㅣ]|ㅗ[ㅏㅐㅣ]?|ㅜ[ㅓㅔㅣ]?|ㅡㅣ?)(?:([ㄲㄷㅁㅅ-ㅈㅊ-ㅎ]|ㄱㅅ?|ㄴ[ㅈㅎ]?|ㄹ[ㄱㅁㅂㅅㅌ-ㅎ]?|ㅂㅅ?)(?![ㅏ-ㅣ]))?");
+    private final static Map<String, String> COMPLEX_JAMOS = new HashMap<String, String>(){{
+        put("ㅗㅏ", "ㅘ"); put("ㅗㅐ", "ㅙ"); put("ㅗㅣ", "ㅚ"); put("ㅜㅓ", "ㅝ"); put("ㅜㅔ", "ㅞ"); put("ㅜㅣ", "ㅟ"); put("ㅡㅣ", "ㅢ");
+        put("ㄱㅅ", "ㄳ"); put("ㄴㅈ", "ㄵ"); put("ㄴㅎ", "ㄶ"); put("ㄹㄱ", "ㄺ"); put("ㄹㅁ", "ㄻ"); put("ㄹㅂ", "ㄼ"); put("ㄹㅅ", "ㄽ"); put("ㄹㅌ", "ㄾ"); put("ㄹㅍ", "ㄿ"); put("ㄹㅎ", "ㅀ"); put("ㅂㅅ", "ㅄ");
+    }};
 
-    private static String reverse(String str){
-        return Objects.isNull(str) ? " " : new StringBuilder(str).reverse().toString();
-    }
-
-    private static boolean isAlphabet(int str){
+    private static boolean isAlphabet(int str) {
         return ALPHABETS.indexOf(str) >= 0;
     }
 
-    private static char toHangeulJamo(int str){
+    private static char toHangeul(int str) {
         return HANGEUL_JAMOS.charAt(ALPHABETS.indexOf(str));
     }
 
-    private static String replaceAlphabets(String str){
-        return str.chars().mapToObj(c -> String.valueOf((char) (isAlphabet(c) ? toHangeulJamo(c) : c))).collect(Collectors.joining());
+    private static String replaceAlphabets(String str) {
+        return str.chars().mapToObj(c -> String.valueOf((char) (isAlphabet(c) ? toHangeul(c) : c))).collect(Collectors.joining());
     }
 
-    private static String stackHangeulJamos(String initialJamo, String medialJamo, String finalJamo){
-        return new String(Character.toChars(44032 + FINAL_JAMOS.indexOf(finalJamo) + MEDIAL_JAMOS.indexOf(medialJamo) * 28 + INITIAL_JAMOS.indexOf(initialJamo) * 588));
+    private static String stack(String i, String m, String f) {
+        if (Objects.isNull(f)) f = " ";
+        return new String(Character.toChars(44032 + FINAL_JAMOS.indexOf(f) + MEDIAL_JAMOS.indexOf(m) * 28 + INITIAL_JAMOS.indexOf(i) * 588));
     }
 
-    private static String gksdud(String str){
+    private static String gksdud(String str) {
         final StringBuffer buffer = new StringBuffer();
-        final Matcher matcher = HANGEUL_SYLLABLE.matcher(reverse(replaceAlphabets(str)));
+        final Matcher matcher = HANGEUL_SYLLABLE.matcher(replaceAlphabets(str));
 
-        while(matcher.find()){
-            final String finalJamo = reverse(matcher.group(1)), medialJamo = reverse(matcher.group(2)), initialJamo = reverse(matcher.group(3));
-            matcher.appendReplacement(buffer, stackHangeulJamos(initialJamo, COMPLEX_MEDIAL_JAMOS.getOrDefault(medialJamo, medialJamo), COMPLEX_FINAL_JAMOS.getOrDefault(finalJamo, finalJamo)));
+        while (matcher.find()) {
+            final String i = matcher.group(1), m = matcher.group(2), f = matcher.group(3);
+            matcher.appendReplacement(buffer, stack(i, COMPLEX_JAMOS.getOrDefault(m, m), COMPLEX_JAMOS.getOrDefault(f, f)));
         }
 
-        matcher.appendTail(buffer);
-        return reverse(buffer.toString());
+        return matcher.appendTail(buffer).toString();
     }
 
     @Override
@@ -68,10 +66,12 @@ public class Gksdud extends JavaPlugin implements Listener {
 
     @EventHandler
     @SuppressWarnings("unused")
-    public void onPlayerInteract(AsyncPlayerChatEvent event){
+    public void onPlayerInteract(AsyncPlayerChatEvent event) {
         if(event.isCancelled()) return;
 
-        final String message = event.getMessage();
-        if(message.startsWith(",")) event.setMessage(gksdud(message.substring(1)) + ChatColor.DARK_GRAY + " (번역됨)");
+        final String[] parts = event.getMessage().split(",");
+        for (int i = 1; i < parts.length; i += 2) parts[i] = gksdud(parts[i]);
+
+        event.setMessage(String.join("", parts) + ChatColor.DARK_GRAY + " (변환됨)");
     }
 }
