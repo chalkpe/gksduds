@@ -70,8 +70,12 @@ public class Gksdud extends JavaPlugin implements Listener {
         if(event.isCancelled()) return;
 
         final String[] parts = event.getMessage().split(",");
-        for (int i = 1; i < parts.length; i += 2) parts[i] = gksdud(parts[i]);
+        final String origin = String.join("", parts);
 
-        event.setMessage(String.join("", parts) + ChatColor.DARK_GRAY + " (변환됨)");
+        for (int i = 1; i < parts.length; i += 2) parts[i] = gksdud(parts[i]);
+        final String converted = String.join("", parts);
+
+        final String suffix = origin.equals(converted) ? "" : ChatColor.DARK_GRAY + " (변환됨)";
+        event.setMessage(converted + suffix);
     }
 }
