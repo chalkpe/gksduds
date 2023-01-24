@@ -1,5 +1,6 @@
 package pe.chalk.bukkit.gksdud;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -62,6 +63,7 @@ public class Gksdud extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(this, this);
+        new Metrics(this, 17525);
     }
 
     @EventHandler
