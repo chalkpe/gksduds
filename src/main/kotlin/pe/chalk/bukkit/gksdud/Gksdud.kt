@@ -1,7 +1,5 @@
 package pe.chalk.bukkit.gksdud
 
-import org.bstats.bukkit.Metrics
-import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerChatEvent
@@ -32,16 +30,18 @@ class Gksdud : JavaPlugin(), Listener {
             (44032 + FINAL_JAMOS.indexOf(f) + MEDIAL_JAMOS.indexOf(m) * 28 + INITIAL_JAMOS.indexOf(i) * 588).toChar().toString()
         fun gksdud(str: String) =
             HANGEUL_SYLLABLE.replace(replaceAlphabets(str), { it.destructured.let { (i, m, f) -> stack(i, COMPLEX_JAMOS[m] ?: m, COMPLEX_JAMOS[f] ?: f) } })
+        fun check(str: String, range: CharRange, count: Int? = null) =
+            str.count { it in range } / str.length.toDouble() >= 0.75 && (count == null || str.filter { it in range }.toCharArray().distinct().size <= count)
     }
 
-    override fun onEnable() {
-        server.pluginManager.registerEvents(this, this)
-        Metrics(this, 17525)
-    }
+    override fun onEnable() = server.pluginManager.registerEvents(this, this)
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onPlayerInteract(event: AsyncPlayerChatEvent) {
         if (event.isCancelled) return
-        event.message = event.message.split(",").mapIndexed { i, part -> if (i % 2 == 1) gksdud(part) else part }.joinToString("")
+        event.message = when {
+            event.message.contains(",") -> event.message.split(",").mapIndexed { i, part -> if (i % 2 == 1) gksdud(part) else part }.joinToString("")
+            else -> event.message.split(" ").map { gksdud(it).takeIf { check(it, '가'..'힣') || check(it, 'ㄱ'..'ㅎ', 2) || check(it, 'ㅏ'..'ㅣ', 2) } ?: it }.joinToString(" ")
+        }
     }
 }
