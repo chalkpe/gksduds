@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "pe.chalk.bukkit"
-version = "1.3.0"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
