@@ -1,9 +1,9 @@
 package pe.chalk.bukkit.gksdud
 
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerChatEvent
-import org.bukkit.event.EventPriority
 import org.bukkit.plugin.java.JavaPlugin
 
 val INITIAL_JAMOS = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
@@ -34,12 +34,14 @@ class Gksdud : JavaPlugin(), Listener {
 
     override fun onEnable() = server.pluginManager.registerEvents(this, this)
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onPlayerInteract(event: AsyncPlayerChatEvent) {
-        if (event.isCancelled) return
-        event.message = when {
-            event.message.contains(",") -> event.message.split(",").mapIndexed { i, part -> if (i % 2 == 1) gksdud(part) else part }.joinToString("")
-            else -> event.message.split(" ").map { gksdud(it).takeIf { check(it.filter { c -> CHECKS.any { c in it.key } }) } ?: it }.joinToString(" ")
+        val (command, message) = "^(,*)(.*)$".toRegex().matchEntire(event.message)?.destructured ?: return
+        event.message = when (command.length) {
+            0 -> message.split(" ").map { gksdud(it).takeIf { check(it.filter { c -> CHECKS.any { c in it.key } }) } ?: it }.joinToString(" ")
+            1 -> gksdud(message)
+            2 -> message
+            else -> return
         }
     }
 }
