@@ -29,7 +29,7 @@ class Gksdud : JavaPlugin(), Listener {
         fun replaceAlphabets(str: String) = str.map { if (isAlphabet(it)) toHangeul(it) else it }.joinToString("")
         fun stack(i: String, m: String, f: String = " ") = (44032 + FINAL_JAMOS.indexOf(f) + MEDIAL_JAMOS.indexOf(m) * 28 + INITIAL_JAMOS.indexOf(i) * 588).toChar().toString()
         fun gksdud(str: String) = HANGEUL_SYLLABLE.replace(replaceAlphabets(str), { it.destructured.let { (i, m, f) -> stack(i, COMPLEX_JAMOS[m] ?: m, COMPLEX_JAMOS[f] ?: f) } })
-        fun check(str: String) = CHECKS.any { (range, count) -> str.filter { it in range }.let { it.length / str.length.toDouble() >= 0.75 && it.toList().distinct().size <= count } }
+        fun check(str: String) = CHECKS.any { (range, count) -> str.filter { it in range }.let { it.length / str.length.toDouble() >= 0.5 && it.toList().distinct().size <= count } }
     }
 
     override fun onEnable() = server.pluginManager.registerEvents(this, this)
